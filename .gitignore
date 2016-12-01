@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.coverage
+
+.DS_Store
+
+.sublime-*
