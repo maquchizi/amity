@@ -8,6 +8,9 @@ class Person(object):
         self.role = role
         self.wants_accommodation = wants_accommodation
 
+    def assign_office(self):
+        pass
+
 
 class Staff(Person):
     """
@@ -33,3 +36,6 @@ class Fellow(Person):
         super(Person, self).__init__()
         self.name = name
         self.wants_accommodation = wants_accommodation
+
+    def assign_living_space(self):
+        pass
