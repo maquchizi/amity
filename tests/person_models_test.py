@@ -36,6 +36,10 @@ class TestPerson(TestCase):
             msg='''Staff Member should have staff role'''
         )
 
+    @skip('WIP')
+    def test_new_fellow_is_assigned_living_space(self):
+        pass
+
     @skip("WIP")
     def test_staff_member_cannot_have_accommodation(self):
         self.assertRaises(
