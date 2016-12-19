@@ -27,7 +27,7 @@ class Amity:
         print(args)
 
     def add_person(self, name, designation, wants_accomadation):
-       pass
+        pass
 
     def reallocate_person(self, person_id, new_room):
         pass
