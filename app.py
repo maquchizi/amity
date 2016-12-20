@@ -13,7 +13,7 @@ This system will be used to automatically allocate spaces to people at random.
 
 
 Usage:
-    amity create_room <room_name> <room_type>
+    amity create_room (-o | --office | -l | --livingspace) <room_name,room_name>
     amity add_person <first_name> <last_name> <designation> [<wants_accomodation>]
     amity reallocate_person <first_name> <last_name> <new_room>
     amity load_people <txt_file_name>
@@ -33,6 +33,8 @@ import sys
 import cmd
 from docopt import docopt, DocoptExit
 from app.Amity import Amity
+
+amity = Amity()
 
 
 def docopt_cmd(func):
@@ -76,8 +78,19 @@ class AmityInteractive (cmd.Cmd):
         """
         Create a new room with specified name and type
 
+        Multiple rooms of a single type can be created by providing
+        the switch and a comma-separated list of room names like so:
+
+            create_room -l Ruby, Python, PHP
+                or
+            create_room -o Mordor, Round Table, Camelot
+
         Usage:
-            create_room <room_name> <room_type>
+            create_room (-o | --office | -l | --livingspace) <room_name,room_name>
+
+        Options:
+            -o, --office  Create room(s) of type office
+            -l, --livingspace  Create room(s) of type livingspace
         """
         pass
 
