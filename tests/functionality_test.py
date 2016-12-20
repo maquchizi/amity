@@ -6,6 +6,8 @@ class TestFunctionality(TestCase):
 
     def setUp(self):
         self.amity = Amity()
+        self.amity.create_room('Test Office', 'Office')
+        self.amity.create_room('Test Living Space', 'Living Space')
 
     def test_room_is_created(self):
         original_room_count = len(self.amity.rooms)
@@ -26,23 +28,28 @@ class TestFunctionality(TestCase):
         )
 
     def test_add_person(self):
-        joshua = self.amity.add_person('Joshua Mwaniki', 'Staff')
-        self.assertIn(
-            joshua,
-            self.amity.people,
+        original_people_count = len(self.amity.people)
+
+        self.amity.add_person('Joshua Mwaniki', 'Staff')
+        new_people_count = len(self.amity.people)
+        self.assertEqual(
+            original_people_count,
+            new_people_count - 1,
             msg='''Should be able to add staff'''
         )
 
-        john = self.amity.add_person('John Doe', 'Fellow', 'Y')
-        self.assertIn(
-            john,
-            self.amity.people,
+        self.amity.add_person('John Doe', 'Fellow', 'Y')
+        new_people_count = len(self.amity.people)
+        self.assertEqual(
+            original_people_count,
+            new_people_count - 2,
             msg='''Should be able to add fellows with accomodation'''
         )
 
-        jane = self.amity.add_person('Jane Doe', 'Fellow', 'N')
-        self.assertIn(
-            jane,
-            self.amity.people,
+        self.amity.add_person('Jane Doe', 'Fellow', 'N')
+        new_people_count = len(self.amity.people)
+        self.assertEqual(
+            original_people_count,
+            new_people_count - 3,
             msg='''Should be able to add fellows without accomodation'''
         )

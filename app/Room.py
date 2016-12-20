@@ -6,6 +6,7 @@ class Room(object):
         super(Room, self).__init__()
         self.room_name = room_name
         self.room_type = room_type
+        self.occupants = []
 
 
 class LivingSpace(Room):
@@ -14,6 +15,7 @@ class LivingSpace(Room):
     """
     capacity = 4
     room_type = 'Living Space'
+    occupants = []
 
     def __init__(self, room_name):
         super(Room, self).__init__()
@@ -26,6 +28,7 @@ class Office(Room):
     """
     capacity = 6
     room_type = 'Office'
+    occupants = []
 
     def __init__(self, room_name):
         super(Room, self).__init__()

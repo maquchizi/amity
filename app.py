@@ -104,6 +104,8 @@ class AmityInteractive (cmd.Cmd):
             amity.create_room(room_name, room_type)
 
         print(amity.rooms)
+        print(amity.offices)
+        print(amity.livingspaces)
 
     @docopt_cmd
     def do_add_person(self, args):
@@ -122,17 +124,7 @@ class AmityInteractive (cmd.Cmd):
             print('Sorry, staff cannot be assigned living quarters')
             return
 
-        print(name)
-        print(designation)
-        print(wants_accommodation)
-        response = amity.add_person(name, designation, wants_accommodation)
-        print(response)
-
-        # print(args)
-        # print(args['fellow'])
-        # print(args['staff'])
-        # print(amity.rooms)
-        # print(amity.people)
+        amity.add_person(name, designation, wants_accommodation)
 
     @docopt_cmd
     def do_reallocate_person(self, arg):
