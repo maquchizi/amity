@@ -24,3 +24,25 @@ class TestFunctionality(TestCase):
             original_room_count + 2,
             msg='''Room count should increment on living space creation'''
         )
+
+    def test_add_person(self):
+        joshua = self.amity.add_person('Joshua Mwaniki', 'Staff')
+        self.assertIn(
+            joshua,
+            self.amity.people,
+            msg='''Should be able to add staff'''
+        )
+
+        john = self.amity.add_person('John Doe', 'Fellow', 'Y')
+        self.assertIn(
+            john,
+            self.amity.people,
+            msg='''Should be able to add fellows with accomodation'''
+        )
+
+        jane = self.amity.add_person('Jane Doe', 'Fellow', 'N')
+        self.assertIn(
+            jane,
+            self.amity.people,
+            msg='''Should be able to add fellows without accomodation'''
+        )

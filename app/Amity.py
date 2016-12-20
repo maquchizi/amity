@@ -19,7 +19,7 @@ class Amity:
 
         self.rooms[room_name] = room
 
-    def add_person(self, name, designation, wants_accomodation):
+    def add_person(self, name, designation, wants_accomodation='N'):
         pass
 
     def reallocate_person(self, person_id, new_room):

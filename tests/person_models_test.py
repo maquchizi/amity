@@ -24,14 +24,14 @@ class TestPerson(TestCase):
 
     def test_fellow_has_fellow_role(self):
         self.assertEqual(
-            self.ganga.role,
+            self.ganga.designation,
             'FELLOW',
             msg='''Fellow should have fellow roles'''
         )
 
     def test_staff_has_staff_role(self):
         self.assertEqual(
-            self.joshua.role,
+            self.joshua.designation,
             'STAFF',
             msg='''Staff Member should have staff role'''
         )

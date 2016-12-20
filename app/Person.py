@@ -2,10 +2,10 @@ class Person(object):
     """
     docstring for Person
     """
-    def __init__(self, name, role, wants_accommodation):
+    def __init__(self, name, designation, wants_accommodation):
         super(Person, self).__init__()
         self.name = name
-        self.role = role
+        self.designation = designation
         self.wants_accommodation = wants_accommodation
 
     def assign_office(self):
@@ -16,7 +16,7 @@ class Staff(Person):
     """
     docstring for Staff
     """
-    role = 'STAFF'
+    designation = 'STAFF'
     office = None
 
     def __init__(self, name):
@@ -28,7 +28,7 @@ class Fellow(Person):
     """
     docstring for Fellow
     """
-    role = 'FELLOW'
+    designation = 'FELLOW'
     office = None
     living_space = None
 
