@@ -14,8 +14,8 @@ This system will be used to automatically allocate spaces to people at random.
 
 Usage:
     amity create_room (-o | --office | -l | --livingspace) <room_names>...
-    amity add_person <first_name> <last_name> (fellow|staff) [(y|n)]
-    amity reallocate_person <first_name> <last_name> <new_room>
+    amity add_person <forename> <surname> (fellow|staff) [(y|n)]
+    amity reallocate_person <forename> <surname> <new_room>
     amity load_people <txt_file_name>
     amity print_allocations [<txt_file_name>]
     amity print_room [<room_name>]
@@ -112,23 +112,21 @@ class AmityInteractive (cmd.Cmd):
         (if they want one)
 
         Usage:
-            add_person <first_name> <last_name> (fellow|staff) [(y|n)]
+            add_person <forename> <surname> (fellow|staff) [(y|n)]
         """
-        name = args['<first_name>'] + " " + args["<last_name>"]
+        name = args['<forename>'] + " " + args["<surname>"]
         designation = 'Fellow' if args['fellow'] else 'Staff'
         wants_accommodation = 'Y' if args['y'] else 'N'
-        # response = amity.add_person(name, designation, wants_accommodation)
-        # if response == 'Invalid Role':
-        #     print('Invalid Role')
-        #     return
-        # elif response == 'No livingspace available':
-        #     print('No livingspace available')
-        #     return
-        # print '%s has been created and given a room' % name
+
+        if designation == 'Staff' and wants_accommodation == 'Y':
+            print('Sorry, staff cannot be assigned living quarters')
+            return
+
         print(name)
         print(designation)
         print(wants_accommodation)
-        amity.add_person(name, designation, wants_accommodation)
+        response = amity.add_person(name, designation, wants_accommodation)
+        print(response)
 
         # print(args)
         # print(args['fellow'])
@@ -142,7 +140,7 @@ class AmityInteractive (cmd.Cmd):
         Reallocate a person to a new room
 
         Usage:
-            reallocate_person <first_name> <last_name> <new_room>
+            reallocate_person <forename> <surname> <new_room>
         """
         pass
 
