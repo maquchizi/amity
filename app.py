@@ -13,7 +13,7 @@ This system will be used to automatically allocate spaces to people at random.
 
 
 Usage:
-    amity create_room (-o | --office | -l | --livingspace) <room_name,room_name>
+    amity create_room (-o | --office | -l | --livingspace) <room_names>...
     amity add_person <first_name> <last_name> <designation> [<wants_accomodation>]
     amity reallocate_person <first_name> <last_name> <new_room>
     amity load_people <txt_file_name>
@@ -86,25 +86,34 @@ class AmityInteractive (cmd.Cmd):
             create_room -o Mordor, Round Table, Camelot
 
         Usage:
-            create_room (-o | --office | -l | --livingspace) <room_name,room_name>
+            create_room (-o | --office | -l | --livingspace) <room_names>...
 
         Options:
             -o, --office  Create room(s) of type office
             -l, --livingspace  Create room(s) of type livingspace
+
+        *TO DO. NOT IMPLEMENTED:*
+            Room types can also be mixed like this:
+            create_room -l Ruby, Python, PHP -o Mordor, Round Table
         """
-        pass
+        # print args
+        room_names = ' '.join(args['<room_names>']).split(',')
+        room_type = 'Living Space' if args['--livingspace'] else 'Office'
+
+        for room_name in room_names:
+            amity.create_room(room_name, room_type)
+
+        print(amity.rooms)
 
     @docopt_cmd
-    def do_add_person(self, arg):
+    def do_add_person(self, args):
         """
         Create a person and assign them random office and a living space
         (if they want one)
 
         Usage:
-            add_person <first_name> <last_name> <designation>
-            [<wants_accomodation>]
+            add_person <first_name> <last_name> <designation> [<wants_accomodation>]
         """
-        pass
 
     @docopt_cmd
     def do_reallocate_person(self, arg):
