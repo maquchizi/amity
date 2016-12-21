@@ -144,7 +144,21 @@ class Amity:
                          value.room_name))
 
     def load_people(self, txt_file):
-        pass
+        with open('txt_files/' + txt_file, 'r') as file:
+            # Read file line by line
+            file_content = file.readlines()
+            # Extract info from each line
+            for line in file_content:
+                # Split line on space
+                info = line.split()
+                name = info[0] + ' ' + info[1]
+                designation = info[2].lower()
+                try:
+                    wants_accomodation = info[3]
+                except IndexError:
+                    pass
+
+                self.add_person(name, designation, wants_accomodation)
 
     def print_allocations(self, filename):
         lines = ''
@@ -155,18 +169,18 @@ class Amity:
 
         # Go through all rooms
         # Add header line for each new room
-        # Add content line for occupantß
+        # Add content line for occupant
         for key, value in self.rooms.iteritems():
-            lines += ('\n\n\t' + value.room_name + ' - ' + value.room_type + '\n' + '-' * 50 + '\n')
+            lines += ('\n\n\t' + value.room_name + ' - ' + value.room_type + '\n' + '-' * 50 + '\n\t')
             for occupant in value.occupants:
-                lines += ('\t' + occupant.name + ',\t')
+                lines += (occupant.name + ', ')
 
         if not filename:
             print(lines)
         else:
-            f = open('txt_files/' + filename, "w")
-            f.write(lines)
-            f.close()
+            txt_file = open('txt_files/' + filename, "w")
+            txt_file.write(lines)
+            txt_file.close()
 
     def print_unallocated(self, filename):
         pass

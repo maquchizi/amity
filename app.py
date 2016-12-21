@@ -140,14 +140,15 @@ class AmityInteractive (cmd.Cmd):
         amity.reallocate_person(name, room)
 
     @docopt_cmd
-    def do_load_people(self, arg):
+    def do_load_people(self, args):
         """
         Add people to rooms from a txt file
 
         Usage:
             load_people <txt_file_name>
         """
-        pass
+        file_name = args['<txt_file_name>']
+        amity.load_people(file_name)
 
     @docopt_cmd
     def do_print_allocations(self, args):
