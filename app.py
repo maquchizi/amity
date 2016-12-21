@@ -150,7 +150,7 @@ class AmityInteractive (cmd.Cmd):
         pass
 
     @docopt_cmd
-    def do_print_allocations(self, arg):
+    def do_print_allocations(self, args):
         """
         Print a list of allocations onto the screen
 
@@ -159,7 +159,8 @@ class AmityInteractive (cmd.Cmd):
         Usage:
             print_allocations [<txt_file_name>]
         """
-        pass
+        file_name = args['<txt_file_name>'] if args['<txt_file_name>'] else ''
+        amity.print_allocations(file_name)
 
     @docopt_cmd
     def do_print_room(self, arg):

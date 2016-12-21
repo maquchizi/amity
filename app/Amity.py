@@ -14,8 +14,6 @@ class Amity:
     vacant_offices = {}
     vacant_livingspaces = {}
     people = []
-    staff = []
-    fellows = []
 
     def create_room(self, room_name, room_type):
         """
@@ -149,7 +147,26 @@ class Amity:
         pass
 
     def print_allocations(self, filename):
-        pass
+        lines = ''
+
+        if len(self.rooms) == 0:
+            print('No Rooms Available')
+            return
+
+        # Go through all rooms
+        # Add header line for each new room
+        # Add content line for occupantß
+        for key, value in self.rooms.iteritems():
+            lines += ('\n\n\t' + value.room_name + ' - ' + value.room_type + '\n' + '-' * 50 + '\n')
+            for occupant in value.occupants:
+                lines += ('\t' + occupant.name + ',\t')
+
+        if not filename:
+            print(lines)
+        else:
+            f = open('txt_files/' + filename, "w")
+            f.write(lines)
+            f.close()
 
     def print_unallocated(self, filename):
         pass
@@ -159,7 +176,7 @@ class Amity:
 
     def save_state(self, db='amity.db'):
 
-        engine = create_engine('sqlite:///%s' % db)
+        engine = create_engine('sqlite:///database_files/%s' % db)
         Base.metadata.create_all(engine)
         Session = sessionmaker(bind=engine)
         session = Session()

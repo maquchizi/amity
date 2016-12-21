@@ -6,3 +6,5 @@ __pycache__/
 
 *.sublime-*
 *.db
+txt_files/*
+database_files/*
