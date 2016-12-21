@@ -103,9 +103,9 @@ class AmityInteractive (cmd.Cmd):
         for room_name in room_names:
             amity.create_room(room_name, room_type)
 
-        print(amity.rooms)
-        print(amity.offices)
-        print(amity.livingspaces)
+        # print(amity.rooms)
+        # print(amity.offices)
+        # print(amity.livingspaces)
 
     @docopt_cmd
     def do_add_person(self, args):
@@ -172,7 +172,7 @@ class AmityInteractive (cmd.Cmd):
         pass
 
     @docopt_cmd
-    def do_save_state(self, arg):
+    def do_save_state(self, args):
         """
         Persist all the data stored in the app to an SQLite database
 
@@ -180,9 +180,14 @@ class AmityInteractive (cmd.Cmd):
         sqlite_database specified
 
         Usage:
-            save_state [--db=database_name_goes_here]
+            save_state [-db <database_name>]
+
+        Options:
+            -db, --database  Name of database
         """
-        pass
+        print(args)
+        db = args['<database_name>'] if args['<database_name>'] else 'amity.db'
+        amity.save_state(db)
 
     @docopt_cmd
     def do_load_state(self, arg):

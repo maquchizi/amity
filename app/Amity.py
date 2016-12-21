@@ -1,6 +1,8 @@
 from app.Room import LivingSpace, Office
 from app.Person import Fellow, Staff
-# from app.DB import PersonModel, RoomModel
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import sessionmaker
+from app.DB import PersonModel, RoomModel, Base
 import random
 
 
@@ -50,7 +52,8 @@ class Amity:
                     person = Fellow(name, True)
                     self.people.append(person)
                     self.rooms[livingspace].occupants.append(person)
-                    print('%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name))
+                    print('%s was assigned the living space %s'
+                          % (person.name, self.rooms[livingspace].room_name))
                 except ValueError:
                     print(self.livingspaces)
                     for key, value in self.livingspaces.iteritems():
@@ -67,7 +70,8 @@ class Amity:
             office = random.sample(self.vacant_offices, 1)[0]
             print(self.rooms[office])
             self.rooms[office].occupants.append(person)
-            print('%s was assigned the office %s' % (person.name, self.rooms[office].room_name))
+            print('%s was assigned the office %s'
+                  % (person.name, self.rooms[office].room_name))
         except ValueError:
             for key, value in self.offices.iteritems():
                 print(key, value.occupants)
@@ -140,7 +144,9 @@ class Amity:
             # Add person to new room
             if new_room == value.room_name:
                 value.occupants.append(person_to_reallocate)
-                print('%s was reassigned to the %s %s' % (person_to_reallocate.name, current_room.room_type, value.room_name))
+                print('%s was reassigned to the %s %s'
+                      % (person_to_reallocate.name, current_room.room_type,
+                         value.room_name))
 
     def load_people(self, txt_file):
         pass
@@ -154,10 +160,44 @@ class Amity:
     def print_room(self, room_name):
         pass
 
-    def save_state(self, db=None):
+    def save_state(self, db='amity.db'):
+
+        engine = create_engine('sqlite:///%s' % db)
+        Base.metadata.create_all(engine)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
         # Loop through all rooms, create room in DB
-        # For each occupant, create person in DB with reference to room
-        pass
+        for key, value in self.rooms.iteritems():
+            room = RoomModel()
+
+            room.room_name = value.room_name
+            room.room_type = value.room_type
+            room.room_capacity = value.capacity
+
+            session.add(room)
+            session.commit()
+
+            current_room_id = room.room_id
+
+            # For each occupant, create person in DB with reference to room
+            for occupant in value.occupants:
+                person = PersonModel()
+
+                person.name = occupant.name
+                person.designation = occupant.designation
+                if room.room_type == 'Office':
+                    person.office = current_room_id
+                else:
+                    person.living_space = current_room_id
+
+                # Make sure to check if person already exists and update instead of creating
+                #
+                # retrieved_person = room.query.filter_by(name=person.name,designation=person.designation).first()
+                # retrieved_person = session.query(PersonModel).filter(PersonModel.name=person.name, PersonModel.designation=person.designation).first()
+                # print(retrieved_person)
+                session.add(person)
+                session.commit()
 
     def load_state(self, db):
         pass

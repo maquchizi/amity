@@ -14,8 +14,8 @@ class PersonModel(Base):
     person_id = Column(Integer(), primary_key=True)
     name = Column(String(255))
     designation = Column(String(255))
-    office = Column(Integer(), ForeignKey('room.room_id'))
-    living_space = Column(Integer(), ForeignKey('room.room_id'))
+    office = Column(Integer(), ForeignKey('rooms.room_id'))
+    living_space = Column(Integer(), ForeignKey('rooms.room_id'))
 
 
 class RoomModel(Base):
