@@ -127,14 +127,17 @@ class AmityInteractive (cmd.Cmd):
         amity.add_person(name, designation, wants_accommodation)
 
     @docopt_cmd
-    def do_reallocate_person(self, arg):
+    def do_reallocate_person(self, args):
         """
         Reallocate a person to a new room
 
         Usage:
             reallocate_person <forename> <surname> <new_room>
         """
-        pass
+        name = args['<forename>'] + " " + args["<surname>"]
+        room = args['<new_room>']
+
+        amity.reallocate_person(name, room)
 
     @docopt_cmd
     def do_load_people(self, arg):

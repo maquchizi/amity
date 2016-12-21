@@ -53,3 +53,6 @@ class TestFunctionality(TestCase):
             new_people_count - 3,
             msg='''Should be able to add fellows without accomodation'''
         )
+
+    def test_reallocate_person(self):
+        pass

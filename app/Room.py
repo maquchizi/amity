@@ -15,11 +15,11 @@ class LivingSpace(Room):
     """
     capacity = 4
     room_type = 'Living Space'
-    occupants = []
 
     def __init__(self, room_name):
         super(Room, self).__init__()
         self.room_name = room_name
+        self.occupants = []
 
 
 class Office(Room):
@@ -28,8 +28,8 @@ class Office(Room):
     """
     capacity = 6
     room_type = 'Office'
-    occupants = []
 
     def __init__(self, room_name):
         super(Room, self).__init__()
         self.room_name = room_name
+        self.occupants = []
