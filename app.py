@@ -185,7 +185,6 @@ class AmityInteractive (cmd.Cmd):
         Options:
             -db, --database  Name of database
         """
-        print(args)
         db = args['<database_name>'] if args['<database_name>'] else 'amity.db'
         amity.save_state(db)
 
@@ -203,7 +202,6 @@ class AmityInteractive (cmd.Cmd):
         """
         Quit app
         """
-
         print('Don\'t forget to be awesome. Bye!')
         exit()
 

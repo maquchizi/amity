@@ -1,6 +1,6 @@
 from app.Room import LivingSpace, Office
 from app.Person import Fellow, Staff
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.DB import PersonModel, RoomModel, Base
 import random
@@ -26,6 +26,8 @@ class Amity:
             room = LivingSpace(room_name)
         else:
             room = Office(room_name)
+
+        print('%s %s created succesfully' % (room_type, room_name))
 
         self.rooms[room_name] = room
         self.update_offices()
@@ -55,10 +57,7 @@ class Amity:
                     print('%s was assigned the living space %s'
                           % (person.name, self.rooms[livingspace].room_name))
                 except ValueError:
-                    print(self.livingspaces)
-                    for key, value in self.livingspaces.iteritems():
-                        print(key, value.occupants)
-                    print(self.vacant_livingspaces)
+
                     print('No Living Spaces Available')
                     return
             else:
@@ -68,14 +67,10 @@ class Amity:
         # Attempt to assign office. Fail if no vacant offices available
         try:
             office = random.sample(self.vacant_offices, 1)[0]
-            print(self.rooms[office])
             self.rooms[office].occupants.append(person)
             print('%s was assigned the office %s'
                   % (person.name, self.rooms[office].room_name))
         except ValueError:
-            for key, value in self.offices.iteritems():
-                print(key, value.occupants)
-            print(self.vacant_offices)
             print('No Offices Available')
             return
 
@@ -110,7 +105,9 @@ class Amity:
 
         # Check that person can be added to that room
         # The whole idea of this is not to assign a staff member living space
-        if person_to_reallocate.designation == 'STAFF' and self.rooms[new_room].room_type == 'Living Space':
+        if person_to_reallocate.designation ==\
+                'STAFF' and self.rooms[new_room].room_type == 'Living Space':
+
             print('Sorry, you can\'t add a staff member to a living space')
             return
 
@@ -175,10 +172,17 @@ class Amity:
             room.room_type = value.room_type
             room.room_capacity = value.capacity
 
-            session.add(room)
-            session.commit()
+            retrieved_room = session.query(RoomModel).\
+                filter(RoomModel.room_name == room.room_name).\
+                first()
 
-            current_room_id = room.room_id
+            # Prevent app from creating duplicate rooms
+            if not retrieved_room:
+                session.add(room)
+                session.commit()
+                current_room_id = room.room_id
+            else:
+                current_room_id = retrieved_room.room_id
 
             # For each occupant, create person in DB with reference to room
             for occupant in value.occupants:
@@ -191,13 +195,24 @@ class Amity:
                 else:
                     person.living_space = current_room_id
 
-                # Make sure to check if person already exists and update instead of creating
-                #
-                # retrieved_person = room.query.filter_by(name=person.name,designation=person.designation).first()
-                # retrieved_person = session.query(PersonModel).filter(PersonModel.name=person.name, PersonModel.designation=person.designation).first()
-                # print(retrieved_person)
-                session.add(person)
-                session.commit()
+                # Make sure to check if person already exists
+                # and update instead of creating
+                retrieved_person = session.query(PersonModel).\
+                    filter(PersonModel.name == person.name,
+                           PersonModel.designation == person.designation).\
+                    first()
+
+                if retrieved_person:
+                    if person.office:
+                        retrieved_person.office = person.office
+                    elif person.living_space:
+                        retrieved_person.living_space = person.living_space
+                    session.commit()
+                else:
+                    session.add(person)
+                    session.commit()
+
+        print('State successfully saved to DB')
 
     def load_state(self, db):
         pass
