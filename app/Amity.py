@@ -253,7 +253,31 @@ class Amity:
         print('State successfully saved to DB')
 
     def load_state(self, db):
-        pass
+        if not db:
+            engine = create_engine('sqlite:///database_files/amity.db')
+        else:
+            engine = create_engine('sqlite:///database_files/%s' % db)
+
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        rooms = session.query(RoomModel).all()
+        people = session.query(PersonModel).all()
+        self.rooms = {}
+        self.people = []
+        for room in rooms:
+            print room.room_name
+            self.create_room(room.room_name, room.room_type)
+            for person in people:
+                if person.office == room.room_id or person.living_space == room.room_id:
+                    if person.designation == 'FELLOW':
+                        person_to_add = Fellow(person.name, 'Y')
+                    else:
+                        person_to_add = Staff(person.name)
+                    self.rooms[room.room_name].occupants.append(person_to_add)
+
+        self.update_offices()
+        self.update_livingspaces()
 
     def update_offices(self):
         self.offices = {key: value for key, value in

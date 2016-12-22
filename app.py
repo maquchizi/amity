@@ -193,14 +193,15 @@ class AmityInteractive (cmd.Cmd):
         amity.save_state(db)
 
     @docopt_cmd
-    def do_load_state(self, arg):
+    def do_load_state(self, args):
         """
         Load data from a database into the application
 
         Usage:
             load_state <database_name>
         """
-        pass
+        database = args['<database_name>']
+        amity.load_state(database)
 
     def do_quit(self, arg):
         """
