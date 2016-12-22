@@ -186,7 +186,17 @@ class Amity:
         pass
 
     def print_room(self, room_name):
-        pass
+        lines = ''
+
+        for key, value in self.rooms.iteritems():
+            if value.room_name == room_name:
+                lines += ('\n\n\t' + value.room_name + ' - ' + value.room_type + '\n' + '-' * 50 + '\n\t')
+                if len(value.occupants) > 0:
+                    for occupant in value.occupants:
+                        lines += (occupant.name + ', ')
+                else:
+                    lines += 'Room is empty'
+                print(lines)
 
     def save_state(self, db='amity.db'):
 

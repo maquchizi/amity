@@ -2,8 +2,8 @@
 
 """
 Amity has rooms which can be offices or living spaces.
-An office can occupy a maximum of 6 people.
-A living space can inhabit a maximum of 4 people.
+An office can accommodate a maximum of 6 people.
+A living space can accomodate a maximum of 4 people.
 
 A person to be allocated could be a fellow or staff.
 Staff cannot be allocated living spaces.
@@ -164,14 +164,15 @@ class AmityInteractive (cmd.Cmd):
         amity.print_allocations(file_name)
 
     @docopt_cmd
-    def do_print_room(self, arg):
+    def do_print_room(self, args):
         """
         Print the names of all the people in specified room on the screen
 
         Usage:
-            print_room [<room_name>]
+            print_room <room_name>
         """
-        pass
+        room_name = args['<room_name>']
+        amity.print_room(room_name)
 
     @docopt_cmd
     def do_save_state(self, args):
@@ -209,6 +210,7 @@ class AmityInteractive (cmd.Cmd):
 
 
 opt = docopt(__doc__, sys.argv[1:], help=True)
+print(__doc__)
 
 if opt['--interactive']:
     try:
