@@ -25,11 +25,11 @@ class Amity:
         else:
             room = Office(room_name)
 
-        print('%s %s created succesfully' % (room_type, room_name))
-
         self.rooms[room_name] = room
         self.update_offices()
         self.update_livingspaces()
+
+        return '%s %s created succesfully' % (room_type, room_name)
 
     def add_person(self, name, designation, wants_accomodation='N'):
         """
@@ -52,12 +52,10 @@ class Amity:
                     person = Fellow(name, True)
                     self.people.append(person)
                     self.rooms[livingspace].occupants.append(person)
-                    print('%s was assigned the living space %s'
-                          % (person.name, self.rooms[livingspace].room_name))
+                    return '%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name)
                 except ValueError:
+                    return 'No Living Spaces Available'
 
-                    print('No Living Spaces Available')
-                    return
             else:
                 person = Fellow(name, False)
                 self.people.append(person)
@@ -66,11 +64,9 @@ class Amity:
         try:
             office = random.sample(self.vacant_offices, 1)[0]
             self.rooms[office].occupants.append(person)
-            print('%s was assigned the office %s'
-                  % (person.name, self.rooms[office].room_name))
+            print('%s was assigned the office %s' % (person.name, self.rooms[office].room_name))
         except ValueError:
-            print('No Offices Available')
-            return
+            return 'No Offices Available'
 
         self.update_livingspaces()
         self.update_offices()
@@ -166,7 +162,7 @@ class Amity:
 
         # Go through all rooms
         # Add header line for each new room
-        # Add content line for occupant
+        # Add content line for occupants
         for key, value in self.rooms.iteritems():
             lines += ('\n\n\t' + value.room_name + ' - ' + value.room_type + '\n' + '-' * 50 + '\n\t')
             for occupant in value.occupants:
@@ -193,7 +189,7 @@ class Amity:
                         lines += (occupant.name + ', ')
                 else:
                     lines += 'Room is empty'
-                print(lines)
+                return lines
 
     def save_state(self, db='amity.db'):
 
@@ -250,7 +246,7 @@ class Amity:
                     session.add(person)
                     session.commit()
 
-        print('State successfully saved to DB')
+        return 'State successfully saved to DB'
 
     def load_state(self, db):
         if not db:
@@ -278,6 +274,8 @@ class Amity:
 
         self.update_offices()
         self.update_livingspaces()
+
+        return 'State successfully loaded from DB'
 
     def update_offices(self):
         self.offices = {key: value for key, value in

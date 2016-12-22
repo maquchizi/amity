@@ -101,11 +101,8 @@ class AmityInteractive (cmd.Cmd):
         room_type = 'Living Space' if args['--livingspace'] else 'Office'
 
         for room_name in room_names:
-            amity.create_room(room_name, room_type)
-
-        # print(amity.rooms)
-        # print(amity.offices)
-        # print(amity.livingspaces)
+            response = amity.create_room(room_name, room_type)
+            print(response)
 
     @docopt_cmd
     def do_add_person(self, args):
@@ -124,7 +121,8 @@ class AmityInteractive (cmd.Cmd):
             print('Sorry, staff cannot be assigned living quarters')
             return
 
-        amity.add_person(name, designation, wants_accommodation)
+        response = amity.add_person(name, designation, wants_accommodation)
+        print(response)
 
     @docopt_cmd
     def do_reallocate_person(self, args):
@@ -173,7 +171,8 @@ class AmityInteractive (cmd.Cmd):
             print_room <room_name>
         """
         room_name = args['<room_name>']
-        amity.print_room(room_name)
+        response = amity.print_room(room_name)
+        print(response)
 
     @docopt_cmd
     def do_save_state(self, args):
@@ -190,7 +189,8 @@ class AmityInteractive (cmd.Cmd):
             -db, --database  Name of database
         """
         db = args['<database_name>'] if args['<database_name>'] else 'amity.db'
-        amity.save_state(db)
+        response = amity.save_state(db)
+        print(response)
 
     @docopt_cmd
     def do_load_state(self, args):
@@ -201,7 +201,8 @@ class AmityInteractive (cmd.Cmd):
             load_state <database_name>
         """
         database = args['<database_name>']
-        amity.load_state(database)
+        response = amity.load_state(database)
+        print(response)
 
     def do_quit(self, arg):
         """
