@@ -137,7 +137,8 @@ class AmityInteractive (cmd.Cmd):
         name = args['<forename>'] + " " + args["<surname>"]
         room = args['<new_room>']
 
-        amity.reallocate_person(name, room)
+        response = amity.reallocate_person(name, room)
+        print(response)
 
     @docopt_cmd
     def do_load_people(self, args):

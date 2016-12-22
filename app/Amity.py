@@ -77,7 +77,7 @@ class Amity:
 
     def reallocate_person(self, name, new_room):
         # Check that person exists
-        person_to_reallocate = False
+        person_to_reallocate = None
         room_exists = None
         room_vacant = False
         current_room = None
@@ -87,9 +87,8 @@ class Amity:
                 person_to_reallocate = person
                 break
 
-        if not person_to_reallocate:
-            print('Sorry, we could not find that person')
-            return
+        if person_to_reallocate is None:
+            return 'Sorry, we could not find that person'
 
         # Check that room exists
         for key, value in self.rooms.iteritems():
@@ -98,24 +97,21 @@ class Amity:
                 break
 
         if not room_exists:
-            print('Sorry, we could not find that room')
-            return
+            return 'Sorry, we could not find that room'
 
         # Check that person can be added to that room
         # The whole idea of this is not to assign a staff member living space
         if person_to_reallocate.designation ==\
                 'STAFF' and self.rooms[new_room].room_type == 'Living Space':
 
-            print('Sorry, you can\'t add a staff member to a living space')
-            return
+            return 'Sorry, you can\'t add a staff member to a living space'
 
         # Check that room is not person's current room
         for key, value in self.rooms.iteritems():
             if person_to_reallocate in value.occupants:
                 current_room = value
                 if new_room == current_room.room_name:
-                    print('This person is already in that room')
-                    return
+                    return 'This person is already in that room'
 
         # Check that room isn't full
         for key, value in self.vacant_livingspaces.iteritems():
@@ -129,19 +125,20 @@ class Amity:
                 break
 
         if not room_vacant:
-            print('Sorry, that room is already full')
-            return
+            return 'Sorry, that room is already full'
 
         for key, value in self.rooms.iteritems():
             # Remove person from old room
             if person_to_reallocate in value.occupants:
                 value.occupants.remove(person_to_reallocate)
+
             # Add person to new room
             if new_room == value.room_name:
                 value.occupants.append(person_to_reallocate)
-                print('%s was reassigned to the %s %s'
-                      % (person_to_reallocate.name, current_room.room_type,
-                         value.room_name))
+
+                return '%s was reassigned to the %s %s'\
+                    % (person_to_reallocate.name, current_room.room_type,
+                       value.room_name)
 
     def load_people(self, txt_file):
         with open('txt_files/' + txt_file, 'r') as file:
