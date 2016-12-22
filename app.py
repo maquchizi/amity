@@ -18,6 +18,7 @@ Usage:
     amity reallocate_person <forename> <surname> <new_room>
     amity load_people <txt_file_name>
     amity print_allocations [<txt_file_name>]
+    amity print_unallocated [-o <filename>]
     amity print_room [<room_name>]
     amity save_state [--db=database_name_goes_here]
     amity load_state <database_name>
@@ -161,6 +162,23 @@ class AmityInteractive (cmd.Cmd):
         """
         file_name = args['<txt_file_name>'] if args['<txt_file_name>'] else ''
         amity.print_allocations(file_name)
+
+    @docopt_cmd
+    def do_print_unallocated(self, args):
+        """
+        Prints a list of unallocated people to the screen.
+
+        Specifying the -o option here outputs the information
+        to the txt file provided
+
+        Usage:
+            print_unallocated [-o <filename>]
+
+        Options:
+            -o, --output Txt file to write to
+        """
+        file_name = args['--output'] if args['--output'] else ''
+        amity.print_unallocated(file_name)
 
     @docopt_cmd
     def do_print_room(self, args):

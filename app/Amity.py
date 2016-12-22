@@ -14,6 +14,7 @@ class Amity:
     vacant_offices = {}
     vacant_livingspaces = {}
     people = []
+    unallocated_people = []
 
     def create_room(self, room_name, room_type):
         """
@@ -54,6 +55,8 @@ class Amity:
                     self.rooms[livingspace].occupants.append(person)
                     return '%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name)
                 except ValueError:
+                    if person not in self.unallocated_people:
+                        self.unallocated_people.append(person)
                     return 'No Living Spaces Available'
 
             else:
@@ -66,6 +69,8 @@ class Amity:
             self.rooms[office].occupants.append(person)
             print('%s was assigned the office %s' % (person.name, self.rooms[office].room_name))
         except ValueError:
+            if person not in self.unallocated_people:
+                self.unallocated_people.append(person)
             return 'No Offices Available'
 
         self.update_livingspaces()
@@ -132,9 +137,13 @@ class Amity:
             if new_room == value.room_name:
                 value.occupants.append(person_to_reallocate)
 
-                return '%s was reassigned to the %s %s'\
-                    % (person_to_reallocate.name, current_room.room_type,
-                       value.room_name)
+                if current_room is None:
+                    return '%s was assigned to %s'\
+                        % (person_to_reallocate.name, value.room_name)
+                else:
+                    return '%s was reassigned to the %s %s'\
+                        % (person_to_reallocate.name, current_room.room_type,
+                           value.room_name)
 
     def load_people(self, txt_file):
         with open('txt_files/' + txt_file, 'r') as file:
@@ -176,7 +185,23 @@ class Amity:
             txt_file.close()
 
     def print_unallocated(self, filename):
-        pass
+        lines = ''
+
+        if len(self.unallocated_people) == 0:
+            print('No unalocated people')
+            return
+
+        # Go through all unallocated_people
+        lines += ('\n\n\t' + 'Unallocated People' + '\n' + '-' * 50 + '\n\t')
+        for person in self.unallocated_people:
+            lines += (person.name + ', ')
+
+        if not filename:
+            print(lines)
+        else:
+            txt_file = open('txt_files/' + filename, "w")
+            txt_file.write(lines)
+            txt_file.close()
 
     def print_room(self, room_name):
         lines = ''
