@@ -53,11 +53,11 @@ class Amity:
                     person = Fellow(name, True)
                     self.people.append(person)
                     self.rooms[livingspace].occupants.append(person)
-                    return '%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name)
+                    print('%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name))
                 except ValueError:
                     if person not in self.unallocated_people:
                         self.unallocated_people.append(person)
-                    return 'No Living Spaces Available'
+                    print('No Living Spaces Available')
 
             else:
                 person = Fellow(name, False)
