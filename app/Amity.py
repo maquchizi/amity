@@ -129,21 +129,23 @@ class Amity:
             return 'Sorry, that room is already full'
 
         for key, value in self.rooms.iteritems():
-            # Remove person from old room
-            if person_to_reallocate in value.occupants:
-                value.occupants.remove(person_to_reallocate)
 
-            # Add person to new room
             if new_room == value.room_name:
-                value.occupants.append(person_to_reallocate)
+                if current_room is not None:
+                    if current_room.room_type == value.room_type:
 
-                if current_room is None:
+                        # Remove from old room
+                        current_room.occupants.remove(person_to_reallocate)
+                        # Add to new room
+                        value.occupants.append(person_to_reallocate)
+                        return '%s was reassigned to the %s %s'\
+                            % (person_to_reallocate.name, current_room.room_type,
+                               value.room_name)
+                else:
+                    # Add to room
+                    value.occupants.append(person_to_reallocate)
                     return '%s was assigned to %s'\
                         % (person_to_reallocate.name, value.room_name)
-                else:
-                    return '%s was reassigned to the %s %s'\
-                        % (person_to_reallocate.name, current_room.room_type,
-                           value.room_name)
 
     def load_people(self, txt_file):
         with open('txt_files/' + txt_file, 'r') as file:
