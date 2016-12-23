@@ -55,6 +55,7 @@ class Amity:
                     self.rooms[livingspace].occupants.append(person)
                     print('%s was assigned the living space %s' % (person.name, self.rooms[livingspace].room_name))
                 except ValueError:
+                    person = Fellow(name, True)
                     if person not in self.unallocated_people:
                         self.unallocated_people.append(person)
                     print('No Living Spaces Available')
@@ -110,9 +111,10 @@ class Amity:
         # Check that room is not person's current room
         for key, value in self.rooms.iteritems():
             if person_to_reallocate in value.occupants:
-                current_room = value
-                if new_room == current_room.room_name:
-                    return 'This person is already in that room'
+                if self.rooms[new_room].room_type == value.room_type:
+                    current_room = value
+                    if new_room == current_room.room_name:
+                        return 'This person is already in that room'
 
         # Check that room isn't full
         for key, value in self.vacant_livingspaces.iteritems():
@@ -132,14 +134,16 @@ class Amity:
 
             if new_room == value.room_name:
                 if current_room is not None:
-                    if current_room.room_type == value.room_type:
+                    # print(self.rooms[new_room].room_type)
+                    # print(value.room_type)
+                    if self.rooms[new_room].room_type == value.room_type:
 
                         # Remove from old room
                         current_room.occupants.remove(person_to_reallocate)
                         # Add to new room
                         value.occupants.append(person_to_reallocate)
                         return '%s was reassigned to the %s %s'\
-                            % (person_to_reallocate.name, current_room.room_type,
+                            % (person_to_reallocate.name, self.rooms[new_room].room_type,
                                value.room_name)
                 else:
                     # Add to room
